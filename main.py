@@ -12,3 +12,6 @@ with open("new-dummy.pdf", "wb") as output:
     write_pdf.write(output)
 
 
+# look at the documentation and maybe work on encrypting next that would be fun
+
+
