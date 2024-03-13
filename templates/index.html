@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF-Schenanigans</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="title">
@@ -18,9 +18,11 @@
         <span>Decrypt</span>
     </div>
     <div>
-        <input type="file" accept="application/pdf" id="fileSubmit">
-        <button id="fileSubmit2">Submit File</button>
+        <form action = "http://127.0.0.1:5000/" method = "POST" 
+        enctype = "multipart/form-data">
+            <input type="file" accept="application/pdf" id="fileSubmit" name="user_file">
+            <input type="submit" id="fileSubmit2">
+        </form>
     </div>
-
 </body>
 </html>

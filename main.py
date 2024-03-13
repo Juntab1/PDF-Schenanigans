@@ -1,11 +1,6 @@
 from pypdf import PdfReader, PdfWriter
 from flask import Flask
 
-# create an instance of this class
-app = Flask(__name__)
-
-# telling Flask what URL should trigger our function
-@app.route("/")
 # Write the provided pdf to be able to 
 # do functions such as encrypt
 def write_pages(write_pdf, read):
@@ -13,8 +8,8 @@ def write_pages(write_pdf, read):
         write_pdf.add_page(page)
 
 # Creates a new pdf to be returned
-def new_pdf(write_pdf):
-    with open("decrypted-dummy.pdf", "wb") as output:
+def new_pdf(write_pdf, user_file, updated_user_file):
+    with open(user_file, "wb") as output:
         write_pdf.write(output)
 
 # This function encrypts a pdf with a password
@@ -27,14 +22,5 @@ def decrypt_given_pdf(read, password):
     if read.is_encrypted:
         read.decrypt(password)
 
-def main():
-    read = PdfReader("dummy.pdf")
-    write_pdf = PdfWriter()
-
-    write_pages(write_pdf, read)
-    return new_pdf(write_pdf)
-
-if __name__ == "__main__":
-    main()
 
 
