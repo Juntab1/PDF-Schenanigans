@@ -1,5 +1,11 @@
 from pypdf import PdfReader, PdfWriter
+from flask import Flask
 
+# create an instance of this class
+app = Flask(__name__)
+
+# telling Flask what URL should trigger our function
+@app.route("/")
 # Write the provided pdf to be able to 
 # do functions such as encrypt
 def write_pages(write_pdf, read):
@@ -26,7 +32,7 @@ def main():
     write_pdf = PdfWriter()
 
     write_pages(write_pdf, read)
-    new_pdf(write_pdf)
+    return new_pdf(write_pdf)
 
 if __name__ == "__main__":
     main()
