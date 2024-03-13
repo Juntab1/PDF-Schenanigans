@@ -8,8 +8,8 @@ def write_pages(write_pdf, read):
         write_pdf.add_page(page)
 
 # Creates a new pdf to be returned
-def new_pdf(write_pdf, user_file, updated_user_file):
-    with open(user_file, "wb") as output:
+def new_pdf(write_pdf, new_user_file):
+    with open(new_user_file, "wb") as output:
         write_pdf.write(output)
 
 # This function encrypts a pdf with a password
