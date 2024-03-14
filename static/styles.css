@@ -19,10 +19,14 @@ body {
 }
 
 .input {
-    text-align: center;
-    display: block;
+    align-items: center;
+    display: flex;
     padding: 2rem;
     font-size: 100px;
+}
+
+span {
+    margin: 0px;
 }
 
 #fileSubmit {
@@ -47,8 +51,4 @@ input[type="checkbox"] {
     width: 150px; 
     height: 50px; 
     font-size: 20px;
-}
-
-span {
-    margin: 0px;
 }

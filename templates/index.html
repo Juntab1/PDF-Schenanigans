@@ -11,15 +11,15 @@
         <h1>PDF-Schenanigans</h1>
         <h3>By: Jun B</h3>
     </div>
-    <div class="input">
-        <input type="checkbox" id="checkbox1" name="checkbox1">
-        <span>Encrypt</span>
-        <input type="checkbox" id="checkbox2" name="checkbox2">
-        <span>Decrypt</span>
-    </div>
     <div>
         <form action = "http://127.0.0.1:5000/" method = "POST" 
         enctype = "multipart/form-data">
+            <div class="input">
+                <input type="checkbox" id="checkbox1" name="Encrypt">
+                <span>Encrypt</span>
+                <input type="checkbox" id="checkbox2" name="Decrypt">
+                <span>Decrypt</span>
+            </div>
             <input type="file" accept="application/pdf" id="fileSubmit" name="user_file">
             <input type="submit" id="fileSubmit2">
         </form>
