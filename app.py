@@ -23,7 +23,7 @@ def upload_file():
 
       # empty filename check, return comment
       if f.filename == '':
-          return "no file"
+        return "no file"
       
       # make sure the file is secure
       filename = secure_filename(f.filename)
@@ -33,7 +33,7 @@ def upload_file():
 
       # Ensure the 'uploads' directory exists
       if not os.path.exists(app.config['UPLOAD_FOLDER']):
-          os.makedirs(app.config['UPLOAD_FOLDER'])
+        os.makedirs(app.config['UPLOAD_FOLDER'])
       # make sure app.config['UPLOAD_FOLDER'] exists, if not make it a dir
       curr_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
       # Save the uploaded file with the new filename
@@ -44,7 +44,11 @@ def upload_file():
       write_pdf = PdfWriter()
       read = PdfReader(curr_path)
 
-      main.encrypt_pdf(write_pdf)
+      if request.form.get('Encrypt'):
+        main.encrypt_pdf(write_pdf)
+
+      if request.form.get('Decrypt'):
+        main.decrypt_given_pdf(read, "password")
 
       main.write_pages(write_pdf, read)
 
