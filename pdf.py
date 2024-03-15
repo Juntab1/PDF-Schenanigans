@@ -1,6 +1,7 @@
 from pypdf import PdfReader, PdfWriter
 from flask import Flask
 from reportlab.pdfgen import canvas
+from os import remove
 
 read = PdfReader()
 
@@ -11,9 +12,11 @@ def write_pages(write_pdf, read):
         write_pdf.add_page(page)
 
 # Creates a new pdf to be returned
-def new_pdf(write_pdf, new_user_file):
+def new_pdf(write_pdf, new_user_file, delete_file = None):
     with open(new_user_file, "wb") as output:
         write_pdf.write(output)
+    if (delete_file != None):
+        remove(delete_file)
 
 # This function encrypts a pdf with a password
 def encrypt_pdf(write_pdf):
