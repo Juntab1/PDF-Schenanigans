@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, send_file
 from pypdf import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
-import main
+import pdf
 
 app = Flask(__name__)
 
@@ -45,17 +45,23 @@ def upload_file():
       read = PdfReader(curr_path)
 
       if request.form.get('Encrypt'):
-        main.encrypt_pdf(write_pdf)
+        pdf.encrypt_pdf(write_pdf)
 
       if request.form.get('Decrypt'):
-        main.decrypt_given_pdf(read, "password")
+        pdf.decrypt_given_pdf(read, "password")
 
-      main.write_pages(write_pdf, read)
+      pdf.write_pages(write_pdf, read)
 
-      main.new_pdf(write_pdf, new_file_path)
+      pdf.new_pdf(write_pdf, new_file_path)
     
       # Return the uploaded file with the new filename as an attachment for download
       return send_file(new_file_path, as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+# TODO:
+    # Make if statements to check cases such as a file that is not encrypted is passed
+    # as a file to decrypt
