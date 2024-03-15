@@ -12,6 +12,7 @@ def write_pages(write_pdf, read):
         write_pdf.add_page(page)
 
 # Creates a new pdf to be returned
+# Optional parameter for taking care of temp. files created in process
 def new_pdf(write_pdf, new_user_file, delete_file = None):
     with open(new_user_file, "wb") as output:
         write_pdf.write(output)
