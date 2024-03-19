@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, send_file
 from pypdf import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 import pdf
+from os import remove
 
 app = Flask(__name__)
 
@@ -11,6 +12,15 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# use SQLAlchamy to keep track of path names to be able to use it here
+# without having to create global variables
+@app.after_request
+def remove_temp_pdf(response):
+    if (os.path.exists(curr_path))
+    os.remove(curr_path)
+    os.remove(new_file_path)
+    return response
 
 # app.route with get and post
 @app.route('/', methods = ['POST'])
@@ -56,7 +66,15 @@ def upload_file():
       pdf.write_pages(write_pdf, read)
 
       pdf.new_pdf(write_pdf, new_file_path)
-    
+
+      # Need to return response to maintain exectuion of normal response
+      # before getting to this after request
+      @app.after_request
+      def remove_temp_pdf(response):
+         os.remove(curr_path)
+         os.remove(new_file_path)
+         return response
+         
       # Return the uploaded file with the new filename as an attachment for download
       return send_file(new_file_path, as_attachment=True)
 
