@@ -50,6 +50,9 @@ def upload_file():
       if request.form.get('Decrypt'):
         pdf.decrypt_given_pdf(read, "password")
 
+      if request.form.get('Text_extract'):
+        read = pdf.extract_text_pdf(read)
+
       pdf.write_pages(write_pdf, read)
 
       pdf.new_pdf(write_pdf, new_file_path)
