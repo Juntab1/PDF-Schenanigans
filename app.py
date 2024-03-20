@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request, send_file
+from flask_sqlalchemy import SQLAlchemy
 from pypdf import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 import pdf
@@ -9,6 +10,14 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
+db = SQLAlchemy()
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+db.init_app(app)
+
+class remove_file(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  file_path = db.Column(db.Text, unique=True, nullable=False)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -17,10 +26,10 @@ def index():
 # without having to create global variables
 @app.after_request
 def remove_temp_pdf(response):
-    if (os.path.exists(curr_path))
-    os.remove(curr_path)
-    os.remove(new_file_path)
-    return response
+  user_path = db.query.all()
+  for path in user_path:
+    os.remove(path)
+  return response
 
 # app.route with get and post
 @app.route('/', methods = ['POST'])
@@ -67,13 +76,9 @@ def upload_file():
 
       pdf.new_pdf(write_pdf, new_file_path)
 
-      # Need to return response to maintain exectuion of normal response
-      # before getting to this after request
-      @app.after_request
-      def remove_temp_pdf(response):
-         os.remove(curr_path)
-         os.remove(new_file_path)
-         return response
+      db.session.add(remove_file(file_path = curr_path))
+      db.session.add(remove_file(file_path = new_file_path))
+      db.session.commit()
          
       # Return the uploaded file with the new filename as an attachment for download
       return send_file(new_file_path, as_attachment=True)
