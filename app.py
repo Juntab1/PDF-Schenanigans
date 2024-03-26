@@ -10,13 +10,18 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
-db = SQLAlchemy()
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
-db.init_app(app)
+# current path
+basedir = os.path.abspath(os.path.dirname(__file__))
+# where to establish the database connection
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(basedir, 'database.db')
+# create it
+db = SQLAlchemy(app)
 
+# define each variable within the datbase
 class remove_file(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  file_path = db.Column(db.Text, unique=True, nullable=False)
+  # unique means it has to all be different and nullable means it is not empty
+  file_path = db.Column(db.String(100), unique=True, nullable=False)
 
 @app.route('/')
 def index():
@@ -26,9 +31,14 @@ def index():
 # without having to create global variables
 @app.after_request
 def remove_temp_pdf(response):
-  user_path = db.query.all()
-  for path in user_path:
-    os.remove(path)
+  with app.app_context(): 
+    user_path = remove_file.query.all()
+    for path in user_path:
+      os.remove(path.file_path)
+      db.session.delete(path)
+    db.session.commit()
+    # don't want to close it just yet because it might be used again
+    # db.session.close()
   return response
 
 # app.route with get and post
@@ -76,14 +86,19 @@ def upload_file():
 
       pdf.new_pdf(write_pdf, new_file_path)
 
-      db.session.add(remove_file(file_path = curr_path))
-      db.session.add(remove_file(file_path = new_file_path))
-      db.session.commit()
-         
-      # Return the uploaded file with the new filename as an attachment for download
-      return send_file(new_file_path, as_attachment=True)
+      
+      with app.app_context():
+        db.session.add(remove_file(file_path = curr_path))
+        db.session.add(remove_file(file_path = new_file_path))
+        db.session.commit()
+          
+        # Return the uploaded file with the new filename as an attachment for download
+        return send_file(new_file_path, as_attachment=True)
 
 if __name__ == "__main__":
+    with app.app_context():
+        # create the database instance
+        db.create_all()
     app.run(debug=True)
 
 
