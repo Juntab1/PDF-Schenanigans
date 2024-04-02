@@ -34,7 +34,10 @@ def remove_temp_pdf(response):
   with app.app_context(): 
     user_path = remove_file.query.all()
     for path in user_path:
-      os.remove(path.file_path)
+      # # the problem is that you are not closing the path not letting you remove the os path
+      # os.close(path)
+      # if os.path.exists(path.file_path):
+      #   os.remove(path.file_path)
       db.session.delete(path)
     db.session.commit()
     # don't want to close it just yet because it might be used again
@@ -97,8 +100,8 @@ def upload_file():
 
 if __name__ == "__main__":
     with app.app_context():
-        # create the database instance
-        db.create_all()
+      # create the database instance
+      db.create_all()
     app.run(debug=True)
 
 
