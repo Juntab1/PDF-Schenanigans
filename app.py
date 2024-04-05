@@ -1,4 +1,5 @@
 import os
+import shutil 
 from flask import Flask, render_template, request, send_file
 from flask_sqlalchemy import SQLAlchemy
 from pypdf import PdfReader, PdfWriter
@@ -37,7 +38,7 @@ def remove_temp_pdf(response):
       # # the problem is that you are not closing the path not letting you remove the os path
       # os.close(path)
       # if os.path.exists(path.file_path):
-      #   os.remove(path.file_path)
+         # shutil.rmtree(path.file_path, ignore_errors=True)
       db.session.delete(path)
     db.session.commit()
     # don't want to close it just yet because it might be used again
