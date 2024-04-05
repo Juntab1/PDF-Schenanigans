@@ -22,5 +22,18 @@ def decrypt_given_pdf(read, password):
     if read.is_encrypted:
         read.decrypt(password)
 
+# extract images from a pdf
+# this only takes in one page pdf though for now
+# need to test this later
+# also need to install optional dependencies
+def extract_image(read):
+    count = 0
+
+    for image_file in read.images:
+        with open(str(count) + image_file.name, 'wb') as f:
+            f.write(image_file.data)
+            count += 1
+
+
 
 
